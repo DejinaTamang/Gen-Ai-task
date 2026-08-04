@@ -23,11 +23,12 @@ for num in numbers:
     if num % 2 == 0:
         print(num)
 
+print("Odd Numbers:")
 for num in numbers:
     if num % 2 != 0:
         print(num)
 
-#Q3 SEARCHING NUMBERS IN A LIST
+#Q3 SEARCHING NUMBERS IN A LIST0
 numbers = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
 
 print("Numbers:", numbers)
@@ -56,26 +57,25 @@ print(new_list)
 
 #function to calculate grade based on mark
 print("\nGrade Calculation:")
+
 def calculate_grade(mark):
 
     if mark >= 90:
         return "A"
-
     elif mark >= 80:
         return "B"
-
     elif mark >= 70:
         return "C"
-
     elif mark >= 60:
         return "D"
-
     else:
         return "Fail"
 
+mark = int(input("Enter the mark: "))
+grade = calculate_grade(mark)
 
-print(calculate_grade(95))
-print(calculate_grade(81))
-print(calculate_grade(72))
-print(calculate_grade(65))
-print(calculate_grade(40))
+print("Grade:", grade)
+
+
+
+
