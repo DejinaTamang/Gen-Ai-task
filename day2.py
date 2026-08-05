@@ -131,3 +131,50 @@ i = 1
 while i <= n:
     print(i)
     i += 1
+
+# Question 5:
+# Write a program to reverse a string using a loop.
+
+text = input("Enter a word: ")
+
+reverse = ""
+
+for letter in text:
+    reverse = letter + reverse
+
+print("Reversed word =", reverse)
+
+
+# Question 6:
+# Write a program to check whether a number is prime.
+
+number = int(input("Enter a number for prime check: "))
+
+count = 0
+
+for i in range(1, number + 1):
+    if number % i == 0:
+        count += 1
+
+if count == 2:
+    print(number, "is a Prime Number")
+else:
+    print(number, "is Not a Prime Number")
+
+# Question7 :
+# Write a program to count the vowels and consonants in a word.
+
+word = input("Enter a word: ").lower()
+
+vowels = 0
+consonants = 0
+
+for letter in word:
+    if letter.isalpha():
+        if letter in "aeiou":
+            vowels += 1
+        else:
+            consonants += 1
+
+print("Vowels =", vowels)
+print("Consonants =", consonants)    
