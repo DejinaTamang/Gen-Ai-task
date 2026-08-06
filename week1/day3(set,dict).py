@@ -75,6 +75,51 @@ for student, subjects in students.items():
 
 print(highest_student, highest_total)
 
+#q3 find the key with the highest value in a dictionary
+marks = {
+    "Ram": 85,
+    "Sita": 92,
+    "Hari": 78,
+    "Gita": 95
+}
+
+highest = max(marks, key=marks.get)
+
+print("Highest scorer:", highest)
+print("Marks:", marks[highest])
+
+#Q4 remove duplicates from a dictionary based on values
+data = {
+    "a": 10,
+    "b": 20,
+    "c": 10,
+    "d": 30,
+    "e": 20
+}
+
+result = {}
+
+for key, value in data.items():
+    if value not in result.values():
+        result[key] = value
+
+print(result)
+
+#q5 count each character in a string and store the result in a dictionary
+text = "programming"
+
+freq = {}
+
+for char in text:
+    if char in freq:
+        freq[char] += 1
+    else:
+        freq[char] = 1
+
+print(freq)
+
+
+
 
 #file handling
 with open("week1/sample.txt", "r") as file:
@@ -95,3 +140,6 @@ for word, count in frequency.items():
 
 print("Most frequent word:", most_word)
 print("Frequency:", highest)
+
+
+
