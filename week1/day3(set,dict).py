@@ -142,4 +142,9 @@ print("Most frequent word:", most_word)
 print("Frequency:", highest)
 
 
-
+#appending content to a file
+with open("week1/sample.txt", "a") as f:
+  f.write("Now the file has more content!")
+  
+with open("week1/sample.txt", "r") as f:
+  print(f.read())
