@@ -167,3 +167,90 @@ boat = Boat()
 start(car)
 start(plane)
 start(boat)
+
+#encapsulation
+print("\nEncapsulation Example:")
+class BankAccount:
+
+    def __init__(self, owner, balance):
+
+        self.owner = owner
+        self.__balance = balance
+
+    def deposit(self, amount):
+
+        self.__balance += amount
+        print(f"Deposited {amount}")
+
+    def withdraw(self, amount):
+
+        if amount <= self.__balance:
+
+            self.__balance -= amount
+            print(f"Withdrawn {amount}")
+
+        else:
+
+            print("Insufficient Balance")
+
+    def check_balance(self):
+
+        print("Current Balance:", self.__balance)
+
+
+account = BankAccount("John", 5000)
+
+account.check_balance()
+
+account.deposit(1000)
+
+account.withdraw(2000)
+
+account.check_balance()
+
+print(account.owner)
+
+# print(account.__balance)
+
+#abstract class
+print("\nAbstract Class Example:")
+from abc import ABC, abstractmethod
+
+
+class Shape(ABC):
+
+    @abstractmethod
+    def area(self):
+        pass
+
+
+class Rectangle(Shape):
+
+    def __init__(self, length, width):
+
+        self.length = length
+        self.width = width
+
+    def area(self):
+
+        return self.length * self.width
+
+
+class Circle(Shape):
+
+    def __init__(self, radius):
+
+        self.radius = radius
+
+    def area(self):
+
+        return 3.14 * self.radius * self.radius
+
+
+r = Rectangle(10, 5)
+
+print("Rectangle Area:", r.area())
+
+c = Circle(7)
+
+print("Circle Area:", c.area())
