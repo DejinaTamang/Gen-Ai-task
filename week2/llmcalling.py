@@ -9,9 +9,13 @@ client = OpenAI(
     base_url="https://api.groq.com/openai/v1"#request is sent to this endpoint
 )
 
-response = client.responses.create(
+query=input("Enter your query: ")
+response = client.chat.completions.create(
     model="openai/gpt-oss-20b",
-    input="Explain what is photosynthesis."
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant. onlyanswer question related to math "},
+        {"role": "user", "content": query}
+    ]
 )
 
-print(response.output_text)
+print(response.choices[0].message.content)
