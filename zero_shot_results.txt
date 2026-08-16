@@ -1,0 +1,392 @@
+
+PROMPT 1
+Explain what Artificial Intelligence is in simple words.
+
+RESPONSE:
+**Artificial Intelligence (AI)** is a way to make computers think and act a little like people do.  
+Think of it as giving a machine a “brain” that can:
+
+1. **Learn from experience** – Just as you get better at a game after playing many times, an AI can improve by looking at lots of data.  
+2. **Recognize patterns** – It can spot regularities in pictures, sounds, or text that humans would see as familiar.  
+3. **Make decisions or predictions** – Based on what it has learned, it can suggest the next step, guess what will happen, or choose the best answer.  
+4. **Do tasks automatically** – It can run repetitive jobs, like sorting emails, translating languages, driving a car, or recommending songs.
+
+In short, AI is software that uses math and data to imitate some of the smart things people do—learning, recognizing, deciding—so machines can help us solve problems or perform tasks more efficiently.
+
+============================================================
+
+PROMPT 2
+Summarize the following paragraph in 3 sentences:
+     Old man Miller kept a brass key on a string around his neck. For forty years, he never spoke of what the key opened. The neighborhood children whispered it unlocked a chest of gold, or perhaps a time machine.One rainy Tuesday, Miller fell ill. As the ambulance rolled away, young Leo found the dropped key on the porch. His heart raced. He crossed the threshold, climbed the creaking stairs to the third floor, and found the tiny padlock on the attic door.The key turned with a soft click. Leo pushed the door open. There was no gold. No magic. Just hundreds of birdcages, and in each one, a small mechanical clock ticking in a different rhythm. They filled the room with a gentle, breathing pulse of time.Miller wasn't hiding treasure. He was keeping the quiet seconds safe for the world.y.
+    
+
+RESPONSE:
+Old man Miller kept a brass key around his neck, never revealing what it opened, while neighborhood kids speculated it hid gold or a time machine. When he fell ill one rainy day, young Leo found the key, used it to unlock an attic door, and discovered the room was filled not with treasure but with hundreds of tiny mechanical birdcages, each containing a clock ticking in a unique rhythm. Miller’s secret wasn’t a treasure trove, but a quiet archive of time preserved for the world.
+
+============================================================
+
+PROMPT 3
+Translate the following sentence into korean : "Hello my name is Dejina Tamang .I am 20 years old. I love hangeul ."
+
+RESPONSE:
+안녕하세요. 제 이름은 데지나 타망입니다. 저는 20살입니다. 한글을 사랑합니다.
+
+============================================================
+
+PROMPT 4
+Write a complete e-commerce website in one response.Write a Python program that prints the multiplication table of 10.
+
+RESPONSE:
+Below is a **complete, self‑contained e‑commerce demo** written in Flask (Python 3) that runs locally.  
+After the Flask code you’ll find a tiny Python script that prints the multiplication table of 10.
+
+> **NOTE** – This is only a demo. In production you would add proper authentication, database persistence, payment integration, CSRF protection, etc.  
+
+---
+
+## 1. Project structure
+
+```
+ecommerce_demo/
+├─ app.py
+├─ requirements.txt
+├─ static/
+│  └─ style.css
+└─ templates/
+   ├─ base.html
+   ├─ index.html
+   ├─ product.html
+   └─ cart.html
+```
+
+---
+
+## 2. `requirements.txt`
+
+```txt
+Flask==3.0.3
+```
+
+Install the dependencies:
+
+```bash
+$ pip install -r requirements.txt
+```
+
+---
+
+## 3. `app.py`
+
+```python
+# app.py
+from flask import Flask, render_template, redirect, url_for, request, session
+
+app = Flask(__name__)
+app.secret_key = "dev-secret-key"   # Replace with a secure random key in production
+
+# In‑memory product catalog
+PRODUCTS = {
+    1: {"name": "Vintage T‑Shirt", "price": 19.99, "image": "shirt.png"},
+    2: {"name": "Retro Mug",      "price": 9.99,  "image": "mug.png"},
+    3: {"name": "Classic Poster", "price": 14.49, "image": "poster.png"},
+}
+
+# Helper functions
+def init_cart():
+    if "cart" not in session:
+        session["cart"] = {}
+
+def cart_total():
+    total = 0.0
+    for pid, qty in session["cart"].items():
+        total += PRODUCTS[int(pid)]["price"] * qty
+    return round(total, 2)
+
+@app.route("/")
+def index():
+    return render_template("index.html", products=PRODUCTS)
+
+@app.route("/product/<int:pid>")
+def product_detail(pid):
+    product = PRODUCTS.get(pid)
+    if not product:
+        return "Product not found", 404
+    return render_template("product.html", product=product, pid=pid)
+
+@app.route("/add/<int:pid>", methods=["POST"])
+def add_to_cart(pid):
+    init_cart()
+    qty = int(request.form.get("quantity", 1))
+    session["cart"][str(pid)] = session["cart"].get(str(pid), 0) + qty
+    session.modified = True
+    return redirect(url_for("cart"))
+
+@app.route("/cart")
+def cart():
+    init_cart()
+    cart_items = []
+    for pid, qty in session["cart"].items():
+        prod = PRODUCTS[int(pid)]
+        cart_items.append({
+            "id": pid,
+            "name": prod["name"],
+            "price": prod["price"],
+            "quantity": qty,
+            "subtotal": round(prod["price"] * qty, 2),
+        })
+    return render_template("cart.html", items=cart_items, total=cart_total())
+
+@app.route("/remove/<int:pid>", methods=["POST"])
+def remove_from_cart(pid):
+    init_cart()
+    session["cart"].pop(str(pid), None)
+    session.modified = True
+    return redirect(url_for("cart"))
+
+@app.route("/checkout", methods=["POST"])
+def checkout():
+    # This demo simply clears the cart and shows a thank‑you page
+    session.pop("cart", None)
+    return render_template("checkout.html")
+
+if __name__ == "__main__":
+    app.run(debug=True)
+```
+
+---
+
+## 4. Templates
+
+### `templates/base.html`
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Demo Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+    <h1><a href="{{ url_for('index') }}">Demo Store</a></h1>
+    <nav>
+        <a href="{{ url_for('cart') }}">Cart (<span id="cart-count">{{ session.get('cart', {}).values() | sum | default(0) }}</span>)</a>
+    </nav>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <p>&copy; 2026 Demo Store</p>
+</footer>
+</body>
+</html>
+```
+
+### `templates/index.html`
+
+```html
+{% extends "base.html" %}
+{% block content %}
+<h2>Products</h2>
+<div class="products">
+    {% for pid, prod in products.items() %}
+    <div class="product">
+        <a href="{{ url_for('product_detail', pid=pid) }}">
+            <img src="{{ url_for('static', filename=prod.image) }}" alt="{{ prod.name }}">
+            <h3>{{ prod.name }}</h3>
+            <p>${{ "%.2f"|format(prod.price) }}</p>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+```
+
+### `templates/product.html`
+
+```html
+{% extends "base.html" %}
+{% block content %}
+<div class="product-detail">
+    <h2>{{ product.name }}</h2>
+    <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+    <p>Price: ${{ "%.2f"|format(product.price) }}</p>
+    <form action="{{ url_for('add_to_cart', pid=pid) }}" method="post">
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity" value="1" min="1">
+        <button type="submit">Add to cart</button>
+    </form>
+</div>
+{% endblock %}
+```
+
+### `templates/cart.html`
+
+```html
+{% extends "base.html" %}
+{% block content %}
+<h2>Your Cart</h2>
+{% if items %}
+<table>
+    <thead>
+        <tr>
+            <th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th><th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>${{ "%.2f"|format(item.price) }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ "%.2f"|format(item.subtotal) }}</td>
+            <td>
+                <form action="{{ url_for('remove_from_cart', pid=item.id) }}" method="post" style="display:inline;">
+                    <button type="submit">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p class="total"><strong>Total: ${{ "%.2f"|format(total) }}</strong></p>
+<form action="{{ url_for('checkout') }}" method="post">
+    <button type="submit" class="checkout-btn">Checkout</button>
+</form>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+{% endblock %}
+```
+
+### `templates/checkout.html`
+
+```html
+{% extends "base.html" %}
+{% block content %}
+<h2>Thank you for your purchase!</h2>
+<p>Your order has been processed and the cart is now empty.</p>
+<a href="{{ url_for('index') }}">Continue shopping</a>
+{% endblock %}
+```
+
+---
+
+## 5. Static file
+
+### `static/style.css`
+
+```css
+body {
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 0;
+    background: #f9f9f9;
+    color: #333;
+}
+header {
+    background: #444;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header a { color: white; text-decoration:
+
+============================================================
+
+PROMPT 5
+Explain what is zero-shot learning?
+
+RESPONSE:
+**Zero‑shot learning (ZSL)** is a machine‑learning paradigm in which a model is required to recognise or generate something that it never saw during training.  
+The key idea is that the model has learned to *associate* inputs with some intermediate, class‑agnostic representation (e.g. attributes, semantic vectors, language descriptions). At test time it can match a new, previously‑unseen class to that representation and thus classify it correctly.
+
+---
+
+### Core Components
+
+| Element | Description |
+|---------|-------------|
+| **Training data** | Labeled examples for a set of *seen* classes. |
+| **Auxiliary information** | Class embeddings or attributes (e.g. a word vector for “zebra”, “tiger”, “cat”) that are shared across seen and unseen classes. |
+| **Model** | Learns a mapping from input features (images, text, audio, etc.) to the auxiliary space, or learns to generate features conditioned on the auxiliary description. |
+| **Test data** | Samples belonging to *unseen* classes that were not part of the training label set. |
+
+---
+
+### How it Works
+
+1. **Embedding‑based ZSL**  
+   *The model projects both images and class semantics into a common space.*  
+   * Example: Map an image of a zebra to a semantic vector that is close to the word‑embedding of “zebra” but far from “cat”.  
+   * Classification is done by nearest‑neighbor in the embedding space.
+
+2. **Generative ZSL**  
+   *A generative model (GAN, VAE, diffusion) learns to produce synthetic feature vectors for any class given its semantic description.*  
+   * Synthetic “zebra” features are generated, then a conventional classifier is trained on both real seen features and synthetic unseen features.
+
+3. **Hybrid/Conditional Approaches**  
+   *Condition the feature extractor on the class description (e.g. via attention or conditioning vectors) so the extractor is guided toward the right class.*
+
+4. **Transfer Learning / Domain Adaptation**  
+   *Leverage knowledge from related tasks (e.g. image classification) to help the ZSL model generalise to new classes.*
+
+---
+
+### Typical Tasks
+
+| Domain | Example |
+|--------|---------|
+| **Computer Vision** | Image classification of unseen object categories (e.g., “giraffe”, “hamster”). |
+| **NLP** | Text classification with new labels; language generation conditioned on novel prompts. |
+| **Audio/Video** | Speech recognition for new accents or sign‑language glosses. |
+| **Robotics** | Teaching a robot to manipulate unseen objects using textual descriptions. |
+
+---
+
+### Why Zero‑Shot Matters
+
+| Problem | ZSL Solution |
+|---------|--------------|
+| *Data scarcity* | No need for labeled data from every possible class. |
+| *Scalability* | Adding new categories is as simple as supplying a semantic description. |
+| *Open‑world understanding* | Models can reason about entities beyond their training set, mirroring human generalisation. |
+
+---
+
+### Key Challenges
+
+1. **Semantic Gap** – Disparity between low‑level input features and high‑level class semantics.  
+2. **Ambiguity** – Multiple classes may share similar attributes, leading to confusion.  
+3. **Bias toward Seen Classes** – Models often favour seen classes because they were optimised on them.  
+4. **Evaluation Protocols** – Defining fair benchmarks (e.g., harmonic mean over seen/unseen accuracies).  
+
+---
+
+### State‑of‑the‑Art Techniques (as of 2024)
+
+- **Contrastive Learning** with CLIP‑style image‑text pairs, enabling natural‑language prompts to trigger unseen class recognition.  
+- **Diffusion‑based Generative Models** that synthesize high‑quality feature vectors conditioned on class embeddings.  
+- **Meta‑Learning / Few‑Shot Fine‑Tuning** to adapt quickly when a few examples of an unseen class become available.  
+- **Hybrid Attribute‑Text Models** that combine explicit attributes (e.g., “has stripes”) with word‑embedding semantics for richer descriptions.
+
+---
+
+### Quick Recap
+
+- **Zero‑shot learning** = *recognise or generate new classes without direct training examples*.  
+- It relies on a shared representation between inputs and class descriptions.  
+- Applications span vision, language, audio, and beyond.  
+- Ongoing research focuses on closing the semantic gap, reducing bias, and leveraging generative models for richer synthesis.
+
+---
+
+**Bottom line:**  
+Zero‑shot learning empowers systems to generalise to completely novel categories by learning to map data to a semantic space that can be queried for any class, seen or unseen, using only auxiliary information.
+
+============================================================

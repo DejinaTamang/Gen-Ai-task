@@ -41,7 +41,7 @@ while True:
 
     assistant_reply = response.choices[0].message.content
 
-    print(f"\nBot: {assistant_reply}\n")
+    print(f"\nAI: {assistant_reply}\n")
 
     messages.append(
         {
