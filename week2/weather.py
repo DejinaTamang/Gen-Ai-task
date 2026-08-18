@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 # Load API key from .env
 load_dotenv()
-API_KEY = os.getenv("API_KEY")
+API_KEY = os.getenv("WEATHER_API_KEY")
 
 
 def get_weather():
