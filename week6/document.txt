@@ -1,0 +1,17 @@
+Python is a high-level programming language used for web development,
+automation, data analysis, artificial intelligence and machine learning.
+
+Machine learning allows computers to learn patterns from data
+without being explicitly programmed for every task.
+
+Deep learning is a subset of machine learning that uses neural networks
+with multiple layers to learn complex patterns.
+
+Natural language processing allows computers to process and understand
+human language.
+
+Vector databases store numerical representations of information
+and allow applications to search for semantically similar content.
+
+Retrieval Augmented Generation combines information retrieval with
+language generation to provide answers using relevant external context.
